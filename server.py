@@ -2,13 +2,13 @@
     analysis to be executed over the Flask channel and deployed on
     localhost:5000.
 '''
-# Import Flask, render_template, request from the flask pramework package : TODO
-# Import the sentiment_analyzer function from the package created: TODO
+# Import Flask, render_template, request from the flask pramework package
+# Import the sentiment_analyzer function from the package created
 from flask import Flask, render_template, request
 from SentimentAnalysis.sentiment_analysis import sentiment_analyzer
 
 
-#Initiate the flask app : TODO
+#Initiate the flask app
 
 app = Flask("SentimentAnalyzer")
 
@@ -26,9 +26,12 @@ def sent_analyzer():
 
     label = resp['label']
     score = resp['score']
+    status_code = resp['status_code']
 
-    return f"The provided test has a {label} sentiment with a score of {score}"
-    # TODO
+    if status_code == 200 and not label is None and not score is None:
+        return f"The provided test has a {label} sentiment with a score of {score}"
+
+    return f"Watson was not able to decipher the imput text. Returned status_code {status_code}"
 
 @app.route("/")
 def render_index_page():
@@ -36,11 +39,6 @@ def render_index_page():
         page over the Flask channel
     '''
     return render_template('index.html')
-    #TODO
-
-if __name__ == "__main__":
-    ''' This functions executes the flask app and deploys it on localhost:5000
-    '''#TODO
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000)
